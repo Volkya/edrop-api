@@ -21,7 +21,6 @@ const products = require('./routes/products');
 app.use(products);
 
 
-
 app.listen(port, function() {
     console.log("listo express")
 });

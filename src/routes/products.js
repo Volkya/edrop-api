@@ -130,7 +130,29 @@ router.get('/products/:id', (req, res)=> {
 //   })
 // })
 
+router.put("/:id", (req, res, next) => {
+  //   let attributes = ['title', 'description'];
+let productParams = {};
+  productParams
+      .findByIdAndUpdate(req.params["id"], req.body, { new: true })
+      .then(doc => {
+        res.json(doc);
+      })
+      .catch(err => {
+        res.status(400);
+        res.json(err);
+      });
+});
 
+router.delete('/products/:id', (req, res)=> {
+  Product.findByIdAndRemove(req.params.id)
+      .then(doc => {
+        res.json(doc)
+      }).catch(err=>{
+        console.log(err);
+        res.json(err);
+  })
+});
 
 
 
