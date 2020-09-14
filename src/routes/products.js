@@ -4,38 +4,8 @@ const Product = require('../models/Product');
 const productsController = require('../controllers/ProductsController')
 
 router.route('/')
-    .get(
-        (req, res) => {
-            Product.find({})
-                .then(docs=>{
-                    res.json(docs);
-                }).catch(err => {
-                console.log(err);
-                res.json(err)
-            }) // all products function
-        })
-    .post(
-        (req, res)=>{
-            let body = req.body;
-            console.log(body);
-            const product = new Product({
-                title: body.title,
-                description: body.description
-            });
-            product.save((err, productSaved) => {
-                if(err){
-                    return res.status(400).json({
-                        ok: false,
-                        mensaje: 'error al crear el producto',
-                        errors: err
-                    })
-                }
-                res.json({
-                    ok: true,
-                    mensaje: productSaved
-                })
-            }) // post product function
-        })
+    .get(productsController.paginate)
+    .post(productsController.create)
 
 
 // promesas
@@ -57,26 +27,8 @@ router.route('/')
 
 
 router.route('/:id')
-    .get(
-        (req, res)=> {
-            Product.findById(req.params.id)
-                .then(doc => {
-                    res.json(doc);
-                }).catch(err=> {
-                console.log(err);
-                res.json(err);
-            }) // get one function
-        })
-    .delete(
-        (req, res)=> {
-            Product.findByIdAndRemove(req.params.id)
-                .then(doc => {
-                    res.json(doc)
-                }).catch(err=>{
-                console.log(err);
-                res.json(err);
-            }) // delete function
-        })
+    .get(productsController.show)
+    .delete(productsController.destroy)
     .put()
 
 
