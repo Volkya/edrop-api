@@ -18,7 +18,7 @@ db.connect();
 
 //import and use routes
 const products = require('./routes/products');
-app.use(products);
+app.use('/products', products);
 
 
 app.listen(port, function() {

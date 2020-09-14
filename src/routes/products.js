@@ -1,42 +1,41 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const Product = require('../models/Product');
+const productsController = require('../controllers/ProductsController')
 
-const products = [
-  {
-    "name": "televisor",
-    "marca": "samsung",
-    "stock": "si"
-  },
-  {
-    "name": "televisor",
-    "marca": "samsung",
-    "stock": "si"
-  },
-  {
-    "name": "notebook",
-    "marca": "xiaomi",
-    "stock": "si"
-  },
-  {
-    "name": "consola",
-    "marca": "playstation",
-    "stock": "si"
-  }
-];
-
-
-/* GET home page. */
-router.get('/', (req, res) => {
-  res.json(products)
-});
-
-router.post('/', (req, res) => {
-  res.json({
-    'metodo': 'post'
-  })
-});
-
+router.route('/')
+    .get(
+        (req, res) => {
+            Product.find({})
+                .then(docs=>{
+                    res.json(docs);
+                }).catch(err => {
+                console.log(err);
+                res.json(err)
+            }) // all products function
+        })
+    .post(
+        (req, res)=>{
+            let body = req.body;
+            console.log(body);
+            const product = new Product({
+                title: body.title,
+                description: body.description
+            });
+            product.save((err, productSaved) => {
+                if(err){
+                    return res.status(400).json({
+                        ok: false,
+                        mensaje: 'error al crear el producto',
+                        errors: err
+                    })
+                }
+                res.json({
+                    ok: true,
+                    mensaje: productSaved
+                })
+            }) // post product function
+        })
 
 
 // promesas
@@ -54,54 +53,39 @@ router.post('/', (req, res) => {
 //    })
 // })
 
-router.post('/products', (req, res)=>{
-  let body = req.body;
-  console.log(body);
-  const product = new Product({
-    title: body.title,
-    description: body.description
-  });
-  product.save((err, productSaved) => {
-    if(err){
-      return res.status(400).json({
-        ok: false,
-        mensaje: 'error al crear el producto',
-        errors: err
-      })
-    }
-    res.json({
-      ok: true,
-      mensaje: productSaved
-    })
-  })
-})
 
-// buscar productos
-router.get('/products', (req, res) => {
-  Product.find({})
-    .then(docs=>{
-      res.json(docs);
-    }).catch(err => {
-      console.log(err);
-      res.json(err)
-    })
-})
+
+
+router.route('/:id')
+    .get(
+        (req, res)=> {
+            Product.findById(req.params.id)
+                .then(doc => {
+                    res.json(doc);
+                }).catch(err=> {
+                console.log(err);
+                res.json(err);
+            }) // get one function
+        })
+    .delete(
+        (req, res)=> {
+            Product.findByIdAndRemove(req.params.id)
+                .then(doc => {
+                    res.json(doc)
+                }).catch(err=>{
+                console.log(err);
+                res.json(err);
+            }) // delete function
+        })
+    .put()
 
 
 
 
 
 
-// buscar producto por
-router.get('/products/:id', (req, res)=> {
-  Product.findById(req.params.id)
-    .then(doc => {
-        res.json(doc);
-    }).catch(err=> {
-        console.log(err);
-        res.json(err);
-    })
-})
+
+
 
 // router.put('/products/:id', (req, res)=> {
 //   let attributes = ['title', 'description'];
@@ -130,8 +114,8 @@ router.get('/products/:id', (req, res)=> {
 //   })
 // })
 
-router.put("/:id", (req, res, next) => {
-  //   let attributes = ['title', 'description'];
+router.put("/products/:id", (req, res, next) => {
+    let attributes = ['title', 'description'];
 let productParams = {};
   productParams
       .findByIdAndUpdate(req.params["id"], req.body, { new: true })
@@ -144,15 +128,7 @@ let productParams = {};
       });
 });
 
-router.delete('/products/:id', (req, res)=> {
-  Product.findByIdAndRemove(req.params.id)
-      .then(doc => {
-        res.json(doc)
-      }).catch(err=>{
-        console.log(err);
-        res.json(err);
-  })
-});
+
 
 
 
