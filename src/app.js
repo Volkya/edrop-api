@@ -12,13 +12,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// import and run database
 const db = require('./config/database');
-
 db.connect();
 
-
-const products = require('./routes/index');
+//import and use routes
+const products = require('./routes/products');
 app.use(products);
+
 
 
 app.listen(port, function() {

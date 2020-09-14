@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const dbName = 'edrop-api';
 
 module.exports = {
-    connect: ()=> mongoose.connect('mongodb://localhost/'+dbName),
+    connect: ()=> mongoose.connect('mongodb://localhost/'+dbName, {useNewUrlParser: true, useUnifiedTopology: true}),
+    
     // shothand properties
     dbName,
     connection: ()=>{
