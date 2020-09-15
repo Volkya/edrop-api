@@ -88,3 +88,51 @@ module.exports = {
     destroy,
     show
 };
+
+
+
+
+
+
+// router.put('/products/:id', (req, res)=> {
+//   let attributes = ['title', 'description'];
+// let productParams = {};
+// attributes.forEach(attr=>{
+//   if(Object.prototype.hasOwnProperty.call(req.body,attr))
+//   productParams = req.body(attr);
+// })
+//   // Product.findById(req.params.id)
+//   // .then(doc => {
+//   //   doc.title = req.params.title;
+//   //   doc.description = req.params.description;
+
+//   //   doc.save();
+//   // })
+//   Product.findByIdAndUpdate(req.params.id, productParams, {new: true}
+//   // {
+//   //   title: req.body['title'],
+//   //   description: req.body.description
+//   // }
+//   ).then(doc => {
+//     res.json(doc);
+//   }).catch(err => {
+//     console.log(err);
+//     res.json(err);
+//   })
+// })
+
+// router.put("/products/:id", (req, res, next) => {
+//     let attributes = ['title', 'description'];
+// let productParams = {};
+//   productParams
+//       .findByIdAndUpdate(req.params["id"], req.body, { new: true })
+//       .then(doc => {
+//         res.json(doc);
+//       })
+//       .catch(err => {
+//         res.status(400);
+//         res.json(err);
+//       });
+// });
+
+
