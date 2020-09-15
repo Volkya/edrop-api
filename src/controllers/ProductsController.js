@@ -47,17 +47,17 @@ function create(req, res) {
             return res.status(400).json({
                 ok: false,
                 mensaje: 'error al crear el producto',
-                errors: err,
+                errors: err
                 // next(err)
             })
         }
         res.json({
             ok: true,
-            mensaje: productSaved,
+            mensaje: productSaved
             // next()
         })
     })
-    req.product = productSaved;
+    // req.product = productSaved;
 }
 
 function show(req, res) {
@@ -102,10 +102,10 @@ function saveImage(req, res){
             uploader(path).then(result=>{
                 console.log(product);
                 res.json(product)
-            }).catch{
+            }).catch(err=>{
                 console.log(err);
                 res.json(err);
-            }
+            })
         }
     }else{
         res.status(422).json({

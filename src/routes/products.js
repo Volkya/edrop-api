@@ -6,9 +6,10 @@ const productsController = require('../controllers/ProductsController')
 router.route('/')
     .get(productsController.paginate)
     .post(
-      productsController.multerMiddleware(),
-      productsController.create,
-      productsController.saveImage)
+    //   productsController.multerMiddleware(),
+      productsController.create
+    //   productsController.saveImage
+    )
 
 
 // promesas
@@ -38,12 +39,12 @@ router.route('/:id')
 
 
 
-router.put('/products/:id', (req, res) => {
-    const paEditar = req.params.id;
-    const targetElement = req.body;
+// router.put('/products/:id', (req, res) => {
+//     const paEditar = req.params.id;
+//     const targetElement = req.body;
 
-    Product.findByIdAndUpdate(paEditar, prod)
-})
+//     Product.findByIdAndUpdate(paEditar, prod)
+// })
 
 
 module.exports = router;
