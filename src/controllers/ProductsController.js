@@ -82,7 +82,15 @@ function destroy(req, res) {
 }
 
 
+function multerMiddleware(){
+    return upload.fields([
+        {name: 'coverProduct', maxCount: 5}
+    ]);
+}
+
+
 module.exports = {
+    multerMiddleware,
     paginate,
     create,
     destroy,

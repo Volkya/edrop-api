@@ -5,7 +5,7 @@ const productsController = require('../controllers/ProductsController')
 
 router.route('/')
     .get(productsController.paginate)
-    .post(productsController.create)
+    .post(productsController.multerMiddleware,productsController.create)
 
 
 // promesas
