@@ -1,4 +1,6 @@
 const Product = require('../models/Product');
+const upload = require('../config/upload');
+const uploader = require('../models/Uploader');
 
 function find(req, res, next) {
     Product.findById(req.params.id)
@@ -45,14 +47,17 @@ function create(req, res) {
             return res.status(400).json({
                 ok: false,
                 mensaje: 'error al crear el producto',
-                errors: err
+                errors: err,
+                // next(err)
             })
         }
         res.json({
             ok: true,
-            mensaje: productSaved
+            mensaje: productSaved,
+            // next()
         })
     })
+    req.product = productSaved;
 }
 
 function show(req, res) {
@@ -84,17 +89,38 @@ function destroy(req, res) {
 
 function multerMiddleware(){
     return upload.fields([
-        {name: 'coverProduct', maxCount: 5}
+        {name: 'coverProduct', maxCount: 5},
+        {name: 'avatar', maxCount: 1}
     ]);
 }
 
+
+function saveImage(req, res){
+    if(req.productSaved){
+        if(req.files && req.files.cover){
+            const path = req.files.cover[0].path;
+            uploader(path).then(result=>{
+                console.log(product);
+                res.json(product)
+            }).catch{
+                console.log(err);
+                res.json(err);
+            }
+        }
+    }else{
+        res.status(422).json({
+            error: req.error || 'Could not save product'
+        })
+    }
+}
 
 module.exports = {
     multerMiddleware,
     paginate,
     create,
     destroy,
-    show
+    show,
+    saveImage
 };
 
 
@@ -142,5 +168,3 @@ module.exports = {
 //         res.json(err);
 //       });
 // });
-
-

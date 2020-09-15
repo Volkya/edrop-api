@@ -5,7 +5,10 @@ const productsController = require('../controllers/ProductsController')
 
 router.route('/')
     .get(productsController.paginate)
-    .post(productsController.multerMiddleware,productsController.create)
+    .post(
+      productsController.multerMiddleware(),
+      productsController.create,
+      productsController.saveImage)
 
 
 // promesas
