@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const app = express();
+const cors = require('cors')
 const port = process.env.port || 3200;
 app.set('port', port);
 app.use(logger('dev'));
@@ -17,9 +18,11 @@ const db = require('./config/database');
 db.connect();
 
 //import and use routes
+app.use(cors());
+const users = require('./routes/users');
 const products = require('./routes/products');
 app.use('/products', products);
-
+app.use('/users', users);
 
 app.listen(port, function() {
     console.log("listo express")

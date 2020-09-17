@@ -12,9 +12,21 @@ let producSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    marca: String,
+    talle: String,
+    categoria: String,
+    subcategoria: String,
     description: String,
-    coverImage: String
-})
+    coverImage: String,
+    colores: String,
+    precioCompra: Number,
+    precioVenta: Number,
+    proveedor: String,
+    updated: {
+        type: Number,
+        default: Date.now()
+    }
+});
 
 
 
@@ -33,9 +45,9 @@ let producSchema = new mongoose.Schema({
 //     next();
 //     })
 
-producSchema.statics.validateSlugCount = function(slug) {
-    Product.find({})    
-}
+// producSchema.statics.validateSlugCount = function(slug) {
+//     Product.find({})
+// }
 
 producSchema.plugin(mongoosePaginate);
 

@@ -6,7 +6,8 @@ module.exports = {
     connect: ()=> mongoose.connect('mongodb://localhost/'+dbName, {
         useNewUrlParser: true, 
         useUnifiedTopology: true, 
-        useFindAndModify: false  
+        useFindAndModify: false,
+        useCreateIndex: true
     }),
     set: () => mongoose.set('useCreateIndex', true),
     // shothand properties

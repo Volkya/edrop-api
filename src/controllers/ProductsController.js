@@ -13,18 +13,8 @@ function find(req, res, next) {
         })
 }
 
-// function index(req, res) {
-//     // Todos los productos
-//     Product.find({})
-//         .then(docs=>{
-//             res.json(docs);
-//         }).catch(err => {
-//         console.log(err);
-//         res.json(err)
-//     })
-// }
-
 function paginate(req, res) {
+    // PRODUCTOS POR PAGINA
     Product.paginate({}, {page: req.query.page || 1, limit: 20, sort: {'_id': -1}})
         .then(docs=>{
             res.json(docs);
@@ -32,6 +22,23 @@ function paginate(req, res) {
         console.log(err);
         res.json(err)
     })
+
+    // Todos los productos
+    // Product.find({})
+    //     .then(docs=>{
+    //         res.json(docs);
+    //     }).catch(err => {
+    //     console.log(err);
+    //     res.json(err)
+    // })
+
+    // Product.find(function (err, products) {
+    //     if (err) res.send(500, err.message);
+    //
+    //     console.log('Get /products')
+    //     res.status(200).json(products);
+    // })
+
 }
 
 function create(req, res) {
@@ -40,7 +47,17 @@ function create(req, res) {
     console.log(body);
     const product = new Product({
         title: body.title,
-        description: body.description
+        description: body.description,
+        marca: body.marca,
+        talle: body.talle,
+        categoria: body.categoria,
+        subcategoria: body.subcategoria,
+        proveedor: body.proveedor,
+        precioVenta: body.precioVenta,
+        precioCompra: body.precioCompra,
+        coverImage: body.coverImage,
+        colores: body.colores,
+        updated: body.updated
     });
     product.save((err, productSaved) => {
         if(err){
