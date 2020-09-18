@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
 const productsController = require('../controllers/ProductsController')
+const {isAuthenticated} = require('../controllers/helpers')
+
+
 
 router.route('/')
     .get(productsController.paginate)
@@ -30,21 +33,13 @@ router.route('/')
 
 
 
-router.route('/:id')
+router.route('/:id', isAuthenticated)
     .get(productsController.show)
     .delete(productsController.destroy)
     .put()
 
 
 
-
-
-// router.put('/products/:id', (req, res) => {
-//     const paEditar = req.params.id;
-//     const targetElement = req.body;
-
-//     Product.findByIdAndUpdate(paEditar, prod)
-// })
 
 
 module.exports = router;

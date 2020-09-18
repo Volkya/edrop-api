@@ -18,6 +18,7 @@ let producSchema = new mongoose.Schema({
     subcategoria: String,
     description: String,
     coverImage: String,
+    public_id: String,
     colores: String,
     precioCompra: Number,
     precioVenta: Number,

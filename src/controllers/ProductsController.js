@@ -1,6 +1,18 @@
 const Product = require('../models/Product');
-const upload = require('../config/upload');
-const uploader = require('../models/Uploader');
+const cloudinary = require('cloudinary');
+
+
+// const upload = require('../config/upload');
+// const uploader = require('../models/Uploader');
+
+cloudinary.config({
+    cloud_name: "dovgaoa5l",
+    api_key: "179323816646849",
+    api_secret: "fB6wtPvvEcqOjZUMCwgnlvaiiN0",
+});
+const Image = require('../models/Image');
+const fs = require('fs-extra');
+
 
 function find(req, res, next) {
     Product.findById(req.params.id)
@@ -41,41 +53,66 @@ function paginate(req, res) {
 
 }
 
-function create(req, res) {
-// nuevo producto
-    let body = req.body;
-    console.log(body);
-    const product = new Product({
-        title: body.title,
-        description: body.description,
-        marca: body.marca,
-        talle: body.talle,
-        categoria: body.categoria,
-        subcategoria: body.subcategoria,
-        proveedor: body.proveedor,
-        precioVenta: body.precioVenta,
-        precioCompra: body.precioCompra,
-        coverImage: body.coverImage,
-        colores: body.colores,
-        updated: body.updated
-    });
-    product.save((err, productSaved) => {
-        if(err){
-            return res.status(400).json({
-                ok: false,
-                mensaje: 'error al crear el producto',
-                errors: err
-                // next(err)
-            })
-        }
-        res.json({
-            ok: true,
-            mensaje: productSaved
-            // next()
-        })
-    })
-    // req.product = productSaved;
-}
+async function create(req, res, next) {
+    try{
+        const result = await cloudinary.v2.uploader.upload(req.file.path);
+        const product = new Product({
+            title: req.body.title,
+            description: req.body.description,
+            precioCompra: req.body.precioCompra,
+            precioVenta: req.body.precioVenta,
+            marca: req.body.marca,
+            colores: req.body.colores,
+            talle: req.body.talle,
+            coverImage: result.url,
+            public_id: result.public_id
+        });
+        console.log(result);
+        await product.save();
+        await fs.unlink(req.file.path);
+    }catch (e) {
+        console.log(e);
+    }
+
+
+
+
+
+    // let body = req.body;
+    // const product = new Product({
+    //     title: body.title,
+    //     description: body.description,
+    //     marca: body.marca,
+    //     talle: body.talle,
+    //     categoria: body.categoria,
+    //     subcategoria: body.subcategoria,
+    //     proveedor: body.proveedor,
+    //     precioVenta: body.precioVenta,
+    //     precioCompra: body.precioCompra,
+    //     colores: body.colores,
+    //     updated: body.updated,
+    //     // coverImage: result.coverImage,
+    //     // public_id: result.public_id
+    // });
+    // await product.save((err, productSaved) => {
+    //     if(err){
+    //         return res.status(400).json({
+    //             ok: false,
+    //             mensaje: 'error al crear el producto',
+    //             errors: err
+    //             // next(err)
+    //         })
+    //     }
+    //     res.json({
+    //         ok: true,
+    //         mensaje: productSaved
+    //         // next()
+    //     })
+    // })
+} //end create
+
+
+
 
 function show(req, res) {
 // busqueda individual
@@ -88,12 +125,14 @@ function show(req, res) {
     })
 }
 
-function update(req, res) {
-// recurso actualizado
+
+async function update(req, res) {
+    const {title, description} = req.body;
+    await Product.findByIdAndUpdate(req.params.id, {title, description});
+
 }
 
-function destroy(req, res) {
-// eliminar producto
+async function destroy(req, res) {
     Product.findByIdAndRemove(req.params.id)
         .then(doc => {
             res.json(doc)
@@ -139,49 +178,3 @@ module.exports = {
     show,
     saveImage
 };
-
-
-
-
-
-
-// router.put('/products/:id', (req, res)=> {
-//   let attributes = ['title', 'description'];
-// let productParams = {};
-// attributes.forEach(attr=>{
-//   if(Object.prototype.hasOwnProperty.call(req.body,attr))
-//   productParams = req.body(attr);
-// })
-//   // Product.findById(req.params.id)
-//   // .then(doc => {
-//   //   doc.title = req.params.title;
-//   //   doc.description = req.params.description;
-
-//   //   doc.save();
-//   // })
-//   Product.findByIdAndUpdate(req.params.id, productParams, {new: true}
-//   // {
-//   //   title: req.body['title'],
-//   //   description: req.body.description
-//   // }
-//   ).then(doc => {
-//     res.json(doc);
-//   }).catch(err => {
-//     console.log(err);
-//     res.json(err);
-//   })
-// })
-
-// router.put("/products/:id", (req, res, next) => {
-//     let attributes = ['title', 'description'];
-// let productParams = {};
-//   productParams
-//       .findByIdAndUpdate(req.params["id"], req.body, { new: true })
-//       .then(doc => {
-//         res.json(doc);
-//       })
-//       .catch(err => {
-//         res.status(400);
-//         res.json(err);
-//       });
-// });

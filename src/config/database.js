@@ -15,7 +15,6 @@ module.exports = {
     connection: ()=>{
         if (mongoose.connection)
             return mongoose.connection;
-        console.log('mongo ejecutado');
         return this.connect;
     }
 }
