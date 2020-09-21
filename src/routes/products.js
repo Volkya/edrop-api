@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const productsController = require('../controllers/ProductsController')
-const {autJwt} = require('../middlewares/index');
+const {authJwt} = require('../middlewares/index');
 
 
 router.route('/')
