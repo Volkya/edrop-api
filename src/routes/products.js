@@ -1,17 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const Product = require('../models/Product');
 const productsController = require('../controllers/ProductsController')
-const {isAuthenticated} = require('../controllers/helpers')
-
+const {autJwt} = require('../middlewares/index');
 
 
 router.route('/')
     .get(productsController.paginate)
     .post(
-    //   productsController.multerMiddleware(),
+      [authJwt.verifyToken, authJwt.isAdmin],
       productsController.create
-    //   productsController.saveImage
     )
 
 
@@ -23,11 +20,12 @@ router.route('/category/:id')
 
 router.route('/:id', isAuthenticated)
     .get(productsController.show)
-    .delete(productsController.destroy)
-    .put(productsController.update)
-
-
-
+    .delete(
+        [authJwt.verifyToken, authJwt.isAdmin],
+        productsController.destroy)
+    .put(
+        [authJwt.verifyToken, authJwt.isAdmin],
+        productsController.update)
 
 
 module.exports = router;
