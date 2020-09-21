@@ -15,28 +15,12 @@ router.route('/')
     )
 
 
-// promesas
-// crear producto
-// router.post('/products', (req, res)=>{
-//   Product.create({
-//    title: 'Manualmente insercion 3',
-//    description: "Manualmente insercion descripcion 3"  
-//   }) 
-//    .then(doc=>{
-//        res.json(doc)
-//    }).catch(err=>{
-//        console.log(err); 
-//        res.json(err)  
-//    })
-// })
-
-
 
 
 router.route('/:id', isAuthenticated)
     .get(productsController.show)
     .delete(productsController.destroy)
-    .put()
+    .put(productsController.update)
 
 
 

@@ -14,20 +14,21 @@ const Image = require('../models/Image');
 const fs = require('fs-extra');
 
 
-function find(req, res, next) {
-    Product.findById(req.params.id)
-        .then(product=> {
-            req.product = product;
-            next();
-        })
-        .catch(err=>{
-            next(err);
-        })
+async function find(req, res) {
+    const product = await Product.findById(req.params.id)
+        res.status(200).json(product);
+        // .then(product=> {
+        //     req.product = product;
+        //     next();
+        // })
+        // .catch(err=>{
+        //     next(err);
+        // })
 }
 
-function paginate(req, res) {
+async function paginate(req, res) {
     // PRODUCTOS POR PAGINA
-    Product.paginate({}, {page: req.query.page || 1, limit: 20, sort: {'_id': -1}})
+    await Product.paginate({}, {page: req.query.page || 1, limit: 20, sort: {'_id': -1}})
         .then(docs=>{
             res.json(docs);
         }).catch(err => {
@@ -35,26 +36,11 @@ function paginate(req, res) {
         res.json(err)
     })
 
-    // Todos los productos
-    // Product.find({})
-    //     .then(docs=>{
-    //         res.json(docs);
-    //     }).catch(err => {
-    //     console.log(err);
-    //     res.json(err)
-    // })
-
-    // Product.find(function (err, products) {
-    //     if (err) res.send(500, err.message);
-    //
-    //     console.log('Get /products')
-    //     res.status(200).json(products);
-    // })
-
 }
 
-async function create(req, res, next) {
-    try{
+
+async function create(req, res) {
+    try {
         const result = await cloudinary.v2.uploader.upload(req.file.path);
         const product = new Product({
             title: req.body.title,
@@ -68,55 +54,21 @@ async function create(req, res, next) {
             public_id: result.public_id
         });
         console.log(result);
-        await product.save();
+        const productSaved = await product.save();
         await fs.unlink(req.file.path);
-    }catch (e) {
+        res.status(201).json(productSaved);
+    } catch (e) {
         console.log(e);
+        return res.status(500).json(e);
     }
+}
 
 
 
 
 
-    // let body = req.body;
-    // const product = new Product({
-    //     title: body.title,
-    //     description: body.description,
-    //     marca: body.marca,
-    //     talle: body.talle,
-    //     categoria: body.categoria,
-    //     subcategoria: body.subcategoria,
-    //     proveedor: body.proveedor,
-    //     precioVenta: body.precioVenta,
-    //     precioCompra: body.precioCompra,
-    //     colores: body.colores,
-    //     updated: body.updated,
-    //     // coverImage: result.coverImage,
-    //     // public_id: result.public_id
-    // });
-    // await product.save((err, productSaved) => {
-    //     if(err){
-    //         return res.status(400).json({
-    //             ok: false,
-    //             mensaje: 'error al crear el producto',
-    //             errors: err
-    //             // next(err)
-    //         })
-    //     }
-    //     res.json({
-    //         ok: true,
-    //         mensaje: productSaved
-    //         // next()
-    //     })
-    // })
-} //end create
-
-
-
-
-function show(req, res) {
-// busqueda individual
-    Product.findById(req.params.id)
+async function show(req, res) {
+    await Product.findById(req.params.id)
         .then(doc => {
             res.json(doc);
         }).catch(err=> {
@@ -127,13 +79,19 @@ function show(req, res) {
 
 
 async function update(req, res) {
-    const {title, description} = req.body;
-    await Product.findByIdAndUpdate(req.params.id, {title, description});
-
+    const updatedProduct = await Product.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {
+            new: true,
+        }
+    );
+    res.status(204).json(updatedProduct);
 }
 
 async function destroy(req, res) {
-    Product.findByIdAndRemove(req.params.id)
+    await Product.findByIdAndRemove(req.params.id)
+    // res.status(204).json();
         .then(doc => {
             res.json(doc)
         }).catch(err=>{
@@ -176,5 +134,6 @@ module.exports = {
     create,
     destroy,
     show,
+    update,
     saveImage
-};
+}

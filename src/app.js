@@ -55,8 +55,12 @@ db.connect();
 app.use(cors());
 const users = require('./routes/users');
 const products = require('./routes/products');
+const categories = require('./routes/categories');
+const subcategories = require('./routes/subcategories');
 app.use('/products', products);
 app.use('/users', users);
+app.use('/categories', categories);
+app.use('/subcategories', subcategories);
 
 app.listen(port, function() {
     console.log("listo express")
