@@ -1,4 +1,6 @@
 const Product = require('../models/Product');
+const Subcategory = require('../models/SubCategory');
+const Category = require('../models/Category');
 const cloudinary = require('cloudinary');
 
 
@@ -101,6 +103,51 @@ async function destroy(req, res) {
 }
 
 
+// metemos productos en categorias y subcategorias
+async function crearprod(req, res) {
+    // crear subcategoria para la categoria
+    const prod = new Product(req.body);
+    console.log(prod);
+    // buscar la categoria para asignar la subcategoria
+    const subcat = await Subcategory.findById(req.params.id);
+    console.log(subcat);
+    // asignar a la categoria como dueña de la subcategoria
+    Product.subCat = subcat;
+    // guardar subcategoria para la categoria
+    await prod.save();
+    // asignar la subcategoria dentro del array de subcategorias de la categoria
+    subcat.products.push(prod);
+    // guardar el cat con su subcat nuevo
+    await subcat.save();
+    // enviar a la category la subcategory
+    res.send(prod);
+}
+
+
+
+async function prodCat(req, res) {
+    console.log('no se xq no lee products');
+    // crear subcategoria para la categoria
+    const prod = new Product(req.body);
+    console.log(prod);
+    // buscar la categoria para asignar la subcategoria
+    const cat = await Category.findById(req.params.id);
+    console.log(cat);
+    // asignar a la categoria como dueña de la subcategoria
+    Product.cat = cat;
+    // guardar subcategoria para la categoria
+    await prod.save();
+    // asignar la subcategoria dentro del array de subcategorias de la categoria
+    cat.products.push(prod);
+    // guardar el cat con su subcat nuevo
+    await cat.save();
+    // enviar a la category la subcategory
+    res.send(prod);
+}
+
+
+
+
 function multerMiddleware(){
     return upload.fields([
         {name: 'coverProduct', maxCount: 5},
@@ -135,5 +182,7 @@ module.exports = {
     destroy,
     show,
     update,
+    crearprod,
+    prodCat,
     saveImage
 }

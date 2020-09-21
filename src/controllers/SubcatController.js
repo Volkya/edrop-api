@@ -3,7 +3,7 @@ const Category = require('../models/Category');
 
 async function create(req, res, next){
     try{
-        const subCat = new subCat({
+        const subCat = new Subcategory({
             name: req.body.name,
             public_name: req.body.public_name
         });
@@ -31,7 +31,7 @@ function view(){
 }
 
 function list(req, res){
-    subCat.find({})
+    Subcategory.find({})
         .then(docs=>{
             res.json(docs);
         }).catch(err=>{

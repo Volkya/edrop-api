@@ -12,6 +12,10 @@ const categorySchema = new Schema({
     sub_cats: [{
         type: Schema.Types.ObjectId,
         ref: 'SubCategory'
+    }],
+    products: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Product'
     }]
 });
 

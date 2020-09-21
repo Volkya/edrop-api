@@ -15,7 +15,11 @@ router.route('/')
     )
 
 
+router.route('/:id')
+    .post(productsController.crearprod)
 
+router.route('/category/:id')
+    .post(productsController.prodCat)
 
 router.route('/:id', isAuthenticated)
     .get(productsController.show)

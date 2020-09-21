@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
 const Uploader = require('./Uploader');
 const slugify = require('../plugins/slugify');
+const Schema = mongoose.Schema;
 
-let producSchema = new mongoose.Schema({
+let producSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -26,6 +27,14 @@ let producSchema = new mongoose.Schema({
     updated: {
         type: Number,
         default: Date.now()
+    },
+    subCat: {
+        type: Schema.Types.ObjectId,
+        ref: 'Subcategory'
+    },
+    cat: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category'
     }
 });
 

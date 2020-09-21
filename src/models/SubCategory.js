@@ -13,10 +13,10 @@ const subCategorySchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Category'
     },
-    // products: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Product'
-    // }]
+    products: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Product'
+    }]
 });
 
 
