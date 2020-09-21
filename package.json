@@ -19,6 +19,8 @@
     "express": "~4.16.1",
     "express-session": "^1.17.1",
     "fs-extra": "^9.0.1",
+    "helmet": "^4.1.1",
+    "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
     "mongoose": "^5.10.5",
     "mongoose-bcrypt": "^1.8.1",

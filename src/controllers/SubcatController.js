@@ -59,6 +59,13 @@ async function crearSubCat(req, res) {
     res.send(subCat);
 }
 
+// async function subcatCat(req, res){
+//     // buscar user
+//     // const cat = await Category.findById(req.params.id);
+//     const cat = await Category.findById(req.params.id).populate('sub_cats');
+//     console.log(cat)
+//     res.send(cat);
+// }
 
 
 
@@ -72,5 +79,6 @@ module.exports = {
     edit,
     view,
     list,
-    crearSubCat
+    crearSubCat,
+    // subcatCat
 };

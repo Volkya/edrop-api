@@ -52,6 +52,7 @@ async function create(req, res) {
             marca: req.body.marca,
             colores: req.body.colores,
             talle: req.body.talle,
+            subCat: req.body.subCat,
             coverImage: result.url,
             public_id: result.public_id
         });

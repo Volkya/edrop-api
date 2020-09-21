@@ -7,9 +7,11 @@ async function create(req, res, next){
             name: req.body.name,
             public_name: req.body.public_name
         });
-        await category.save();
+        const catSaved = await category.save();
+        res.status(201).json(catSaved);
     }catch(e){
         console.log(e);
+        return res.status(500).json(e);
     }
 }
 
