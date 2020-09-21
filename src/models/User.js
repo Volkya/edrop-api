@@ -37,13 +37,13 @@ const userSchema = new Schema({
     versionKey: false
 })
 
-// userSchema.methods.encryptPassword = async (password) => {
-//     const salt = await bcrypt.genSalt(10);
-//     const hash = await bcrypt.hash(password.salt);
-// }
-//
-// userSchema.methods.matchPassword = async function (password) {
-//     return await bcrypt.compare(password, this.password);
-// }
+ userSchema.methods.encryptPassword = async function (password) {
+     const salt = await bcrypt.genSalt(10);
+     return await bcrypt.hash(password.salt);
+ }
+
+ userSchema.methods.comparePassword = async function (password, receivedPassword) {
+     return await bcrypt.compare(password, receivedPassword);
+ }
 
 module.exports = mongoose.model('User', userSchema);
